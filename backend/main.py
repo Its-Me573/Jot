@@ -3,7 +3,7 @@ Main application file for the Notes API.
 Handles routing, database connection, and CRUD operations.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import sqlite3
 
 from config import DATABASE_FILE
@@ -14,9 +14,16 @@ app = FastAPI()
 connection = sqlite3.connect(DATABASE_FILE)
 cursor = connection.cursor()
 
+cursor.execute("DROP TABLE IF EXISTS Notes")
+
+
 #Initialize notes table
 cursor.execute('''CREATE TABLE IF NOT EXISTS Notes(
 Name TEXT PRIMARY KEY NOT NULL,
 Content TEXT NOT NULL,
-"Date Created" TEXT UNIQUE NOT NULL)''')
+"Date Created" TEXT NOT NULL)''')
+
+
+
+
 
