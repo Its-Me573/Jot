@@ -23,6 +23,23 @@ Name TEXT PRIMARY KEY NOT NULL,
 Content TEXT NOT NULL,
 "Date Created" TEXT NOT NULL)''')
 
+#post request to add a note to the database
+@app.post("/note/")
+def add_note(name: str, content: str, date_created: str):
+    conn = sqlite3.connect(DATABASE_FILE)
+    cur = conn.cursor()
+
+    try:
+        cur.execute("INSERT INTO Notes (Name, Content, 'Date Created') VALUES (?, ?, ?)", (name, content, date_created))
+        conn.commit()
+        conn.close()
+
+        return {"Name": name, "Content": content, "Date Created": date_created}
+    
+    except sqlite3.IntegrityError:
+        raise HTTPException(status_code=400, detail = "A note with this name already exists")
+    
+
 
 
 
