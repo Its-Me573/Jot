@@ -14,7 +14,7 @@ app = FastAPI()
 connection = sqlite3.connect(DATABASE_FILE)
 cursor = connection.cursor()
 
-cursor.execute("DROP TABLE IF EXISTS Notes")
+# cursor.execute("DROP TABLE IF EXISTS Notes")
 
 
 #Initialize notes table
@@ -40,7 +40,19 @@ def add_note(name: str, content: str, date_created: str):
         raise HTTPException(status_code=400, detail = "A note with this name already exists")
     
 
+#get request for contents of note with unique name
+@app.get("/note/{note_name}")
+def get_note(note_name: str):
+    conn = sqlite3.connect(DATABASE_FILE)
+    cur = conn.cursor()
 
+    cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
+    conn.commit()
+    single_note = cur.fetchone()
 
+    if single_note == None:
+        raise HTTPException(status_code = 404, detail = "No note with name exists")
+        
+    return {"Note": single_note}
 
 
