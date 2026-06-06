@@ -50,9 +50,9 @@ def get_all_note_names():
     cur = conn.cursor()
 
     cur.execute("Select Name From Notes")
-    conn.commit()
     all_notes = cur.fetchall()
 
+    cur.close()
     return {"All Note Names": all_notes}
 
 #get request for contents of note with unique name
@@ -62,12 +62,12 @@ def get_note(note_name: str):
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
-    conn.commit()
     single_note = cur.fetchone()
 
     if single_note == None:
         raise HTTPException(status_code = 404, detail = "No note with name exists")
         
+    cur.close()
     return {"Note": single_note}
 
 
@@ -79,7 +79,6 @@ def modify_note(note_name: str, content: str, date_modified: str):
 
     #Check if note exists
     cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
-    conn.commit()
     single_note = cur.fetchone()
 
     if single_note == None:
@@ -109,7 +108,6 @@ def change_name(note_name: str, new_name: str):
 
     #Check if note exists
     cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
-    conn.commit()
     single_note = cur.fetchone()
 
     if single_note == None:
