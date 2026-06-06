@@ -14,7 +14,7 @@ app = FastAPI()
 connection = sqlite3.connect(DATABASE_FILE)
 cursor = connection.cursor()
 
-#cursor.execute("DROP TABLE IF EXISTS Notes")
+# cursor.execute("DROP TABLE IF EXISTS Notes")
 
 
 #Initialize notes table
@@ -88,3 +88,32 @@ def modify_note(note_name: str, content: str, date_modified: str):
 
     return {"Modified Note": modified_note}
 
+#put endpoint that modifys a notes name only
+@app.put("/note/{note_name}/rename")
+def change_name(note_name: str, new_name: str):
+    conn = sqlite3.connect(DATABASE_FILE)
+    cur = conn.cursor()
+
+    #Check if note exists
+    cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
+    conn.commit()
+    single_note = cur.fetchone()
+
+    if single_note == None:
+        conn.close()
+        raise HTTPException(status_code = 404, detail = "No note with name exists")
+    
+    #Update only content and date_modified    
+    cur.execute('''
+        UPDATE Notes
+        SET Name = ?
+        WHERE Name = ?
+    ''', (new_name, note_name))
+    conn.commit()
+
+    #return the note the stores the row modified
+    cur.execute("SELECT * FROM Notes WHERE Name = ?", (new_name,))
+    modified_note = cur.fetchone()
+    conn.close()
+
+    return {"Modified Note": modified_note}
