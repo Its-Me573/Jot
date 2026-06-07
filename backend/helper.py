@@ -1,4 +1,3 @@
-from fastapi import FastAPI, HTTPException
 import sqlite3
 
 from config import DATABASE_FILE
