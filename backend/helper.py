@@ -14,8 +14,17 @@ def does_note_exist(note_name: str):
     cur.execute("SELECT EXISTS(SELECT 1 FROM Notes WHERE Name = ?)", (note_name,))
 
     if cur.fetchone()[0] == 0:
+        cur.close()
         return False
     else:
+        cur.close()
         return True
 
+#return a single note
+def return_note(note_name: str):
+    conn, cur = open_db()
+    cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
+    single_note = cur.fetchone()
+    cur.close()
+    return single_note
 
