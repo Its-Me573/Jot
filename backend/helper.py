@@ -36,3 +36,9 @@ def return_all_notes():
     cur.close()
     return all_notes
 
+def add_single_note(name: str, content: str, date_created: str, date_modified: str):
+    conn, cur = open_db()
+    cur.execute("INSERT INTO Notes (Name, Content, 'Date Created', 'Date Modified') VALUES (?, ?, ?, ?)", (name, content, date_created, date_modified))
+    conn.commit()
+    conn.close()
+
