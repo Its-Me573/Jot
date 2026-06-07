@@ -43,7 +43,7 @@ def add_note(name: str, content: str, date_created: str, date_modified: str):
         raise HTTPException(status_code=400, detail = "A note with this name already exists")
 
 
-#get request for all note names
+#get request for all notes
 @app.get("/note/get_all_names")
 def get_all_note_names():
     #returns each of the names o each of the rows of notes

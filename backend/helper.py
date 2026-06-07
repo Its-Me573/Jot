@@ -28,3 +28,11 @@ def return_note(note_name: str):
     cur.close()
     return single_note
 
+#return all notes
+def return_all_notes():
+    conn, cur = open_db()
+    cur.execute("Select * From Notes")
+    all_notes = cur.fetchall()
+    cur.close()
+    return all_notes
+
