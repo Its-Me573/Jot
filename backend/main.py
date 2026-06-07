@@ -41,17 +41,10 @@ def get_all_note_names():
 #get request for contents of note with unique name
 @app.get("/note/{note_name}")
 def get_note(note_name: str):
-    conn = sqlite3.connect(DATABASE_FILE)
-    cur = conn.cursor()
-
-    cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
-    single_note = cur.fetchone()
-
-    if single_note == None:
+    if not helper.does_note_exist(note_name):
         raise HTTPException(status_code = 404, detail = "No note with name exists")
-
-    cur.close()
-    return {"Note": single_note}
+    
+    return helper.return_note(note_name)
 
 #put request to modify a note or create note if it does not exist, update date_modified
 @app.put("/note/{note_name}")
