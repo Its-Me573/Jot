@@ -17,7 +17,6 @@ cursor = connection.cursor()
 
 # cursor.execute("DROP TABLE IF EXISTS Notes")
 
-
 #Initialize notes table
 cursor.execute('''CREATE TABLE IF NOT EXISTS Notes(
 Name TEXT PRIMARY KEY NOT NULL,
@@ -25,22 +24,14 @@ Content TEXT NOT NULL,
 "Date Created" TEXT NOT NULL,
 'Date Modified' TEXT NOT NULL)''')
 
-
 #post request to add a note to the database
 @app.post("/note/")
-def add_note(name: str, content: str, date_created: str, date_modified: str):
-    conn = sqlite3.connect(DATABASE_FILE)
-    cur = conn.cursor()
-
-    try:
-        cur.execute("INSERT INTO Notes (Name, Content, 'Date Created', 'Date Modified') VALUES (?, ?, ?, ?)", (name, content, date_created, date_modified))
-        conn.commit()
-        conn.close()
-
-        return {"Name": name, "Content": content, "Date Created": date_created, "Date Modified": date_modified}
-    
-    except sqlite3.IntegrityError:
+def add_note(note_name: str, content: str, date_created: str, date_modified: str):
+    if helper.does_note_exist(note_name):
         raise HTTPException(status_code=400, detail = "A note with this name already exists")
+    
+    return helper.add_single_note(note_name, content, date_created, date_modified)
+
 
 #get request for all notes
 @app.get("/note/get_all_names")

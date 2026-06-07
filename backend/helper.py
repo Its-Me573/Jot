@@ -37,12 +37,12 @@ def return_all_notes():
     return all_notes
 
 #add a note to the database
-def add_single_note(name: str, content: str, date_created: str, date_modified: str):
+def add_single_note(note_name: str, content: str, date_created: str, date_modified: str):
     conn, cur = open_db()
-    cur.execute("INSERT INTO Notes (Name, Content, 'Date Created', 'Date Modified') VALUES (?, ?, ?, ?)", (name, content, date_created, date_modified))
+    cur.execute("INSERT INTO Notes (Name, Content, 'Date Created', 'Date Modified') VALUES (?, ?, ?, ?)", (note_name, content, date_created, date_modified))
     conn.commit()
     conn.close()
-    return return_note(name)
+    return return_note(note_name)
 
 #modify note without modifying name
 def modify_note(content: str, date_modified: str, note_name: str):
