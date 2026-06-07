@@ -42,3 +42,14 @@ def add_single_note(name: str, content: str, date_created: str, date_modified: s
     conn.commit()
     conn.close()
 
+def modify_note(content: str, date_modified: str, note_name: str):
+    conn, cur = open_db()
+    cur.execute('''
+        UPDATE Notes
+        SET Content = ?, "Date Modified" = ?
+        WHERE Name = ?
+    ''', (content, date_modified, note_name))
+    conn.commit()
+    cur.close()
+    return return_note(note_name)
+
