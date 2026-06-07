@@ -49,31 +49,10 @@ def get_note(note_name: str):
 #put request to modify a note or create note if it does not exist, update date_modified
 @app.put("/note/{note_name}")
 def modify_note(note_name: str, content: str, date_modified: str):
-    conn = sqlite3.connect(DATABASE_FILE)
-    cur = conn.cursor()
-
-    #Check if note exists
-    cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
-    single_note = cur.fetchone()
-
-    if single_note == None:
-        conn.close()
+    if not helper.does_note_exist(note_name):
         raise HTTPException(status_code = 404, detail = "No note with name exists")
-
-    #Update only content and date_modified    
-    cur.execute('''
-        UPDATE Notes
-        SET Content = ?, "Date Modified" = ?
-        WHERE Name = ?
-    ''', (content, date_modified, note_name))
-    conn.commit()
-
-    #return the note the stores the row modified
-    cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
-    modified_note = cur.fetchone()
-    conn.close()
-
-    return {"Modified Note": modified_note}
+    
+    return helper.modify_note(content, date_modified, note_name)
 
 #put endpoint that modifys a notes name only
 @app.put("/note/{note_name}/rename")
