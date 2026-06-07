@@ -42,7 +42,6 @@ def add_note(name: str, content: str, date_created: str, date_modified: str):
     except sqlite3.IntegrityError:
         raise HTTPException(status_code=400, detail = "A note with this name already exists")
 
-
 #get request for all notes
 @app.get("/note/get_all_names")
 def get_all_note_names():
@@ -70,7 +69,6 @@ def get_note(note_name: str):
 
     cur.close()
     return {"Note": single_note}
-
 
 #put request to modify a note or create note if it does not exist, update date_modified
 @app.put("/note/{note_name}")
