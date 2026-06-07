@@ -49,11 +49,11 @@ def get_all_note_names():
     conn = sqlite3.connect(DATABASE_FILE)
     cur = conn.cursor()
 
-    cur.execute("Select Name From Notes")
+    cur.execute("Select * From Notes")
     all_notes = cur.fetchall()
 
     cur.close()
-    return {"All Note Names": all_notes}
+    return {"Notes": all_notes}
 
 #get request for contents of note with unique name
 @app.get("/note/{note_name}")
