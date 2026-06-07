@@ -67,7 +67,7 @@ def get_note(note_name: str):
 
     if single_note == None:
         raise HTTPException(status_code = 404, detail = "No note with name exists")
-        
+
     cur.close()
     return {"Note": single_note}
 
