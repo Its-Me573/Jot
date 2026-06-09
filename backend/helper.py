@@ -65,4 +65,12 @@ def change_note_name(new_name: str, note_name: str):
         WHERE Name = ?
     ''', (new_name, note_name))
     conn.commit()
+    cur.close()
     return return_note(new_name)
+
+def delete_note(note_name: str):
+    conn, cur = open_db()
+    cur.execute("DELETE FROM Notes WHERE Name = ?", (note_name,))
+    conn.commit()
+    cur.close()
+    return return_all_notes()

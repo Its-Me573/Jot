@@ -61,3 +61,11 @@ def change_name(note_name: str, new_name: str):
         raise HTTPException(status_code = 404, detail = "No note with name exists")
     
     return helper.change_note_name(new_name, note_name)
+
+#delete note endpoint
+@app.delete("/note/{note_name}")
+def delete_note(note_name: str):
+    if not helper.does_note_exist(note_name):
+        raise HTTPException(status_code = 404, detail = "No note with name exists")
+    
+    return helper.delete_note(note_name)
