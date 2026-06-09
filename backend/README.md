@@ -37,23 +37,30 @@ This project is a RESTful Notes API built with FastAPI and SQLite. It supports c
 ### GET /note/{note_name}
 
 **Request**
+```http
 GET /note/shopping
+```
+
 **Response**
+```json
 {
   "note_name": "shopping",
   "content": "milk, eggs, bread",
   "date_created": "2026-06-09",
   "date_modified": "2026-06-09"
 }
+```
 
 ## Project Structure
 
+```text
 .
 ├── .gitignore    # Git ignore rules
 ├── config.py     # Configuration (e.g. database path)
 ├── helper.py     # Helper functions for CRUD operations
 ├── main.py       # FastAPI app and route definitions
 └── README.md     # Project documentation
+```
 
 ## Future Improvements
 
