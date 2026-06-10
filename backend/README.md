@@ -26,7 +26,7 @@ This project is a RESTful Notes API built with FastAPI and SQLite. It supports c
 ## API Endpoints
 
 - **POST /note** — Create a new note  
-- **GET /note/get_all_names** — Get all note names  
+- **GET /notes** — Get all notes  
 - **GET /note/{note_name}** — Retrieve a single note  
 - **PUT /note/{note_name}** — Update note content  
 - **PUT /note/{note_name}/rename** — Rename a note  
