@@ -25,7 +25,7 @@ def return_note(note_name: str):
     cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
     single_note = cur.fetchone()
     cur.close()
-    return single_note
+    return {"note_name": single_note[0], "content": single_note[1], "date_created": single_note[2], "date_modified": single_note[3]}
 
 #return all notes
 def return_all_notes():
