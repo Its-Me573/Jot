@@ -32,9 +32,8 @@ def add_note(note_name: str, content: str, date_created: str, date_modified: str
     
     return helper.add_single_note(note_name, content, date_created, date_modified)
 
-
 #get request for all notes
-@app.get("/note/get_all_names")
+@app.get("/notes")
 def get_all_note_names():
     return helper.return_all_notes()
 
