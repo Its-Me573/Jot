@@ -25,15 +25,22 @@ def return_note(note_name: str):
     cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
     single_note = cur.fetchone()
     cur.close()
-    return single_note
+    return {"note_name": single_note[0], "content": single_note[1], "date_created": single_note[2], "date_modified": single_note[3]}
 
 #return all notes
 def return_all_notes():
     conn, cur = open_db()
     cur.execute("Select * From Notes")
-    all_notes = cur.fetchall()
+    fetched_notes = cur.fetchall()
     cur.close()
+    
+    all_notes = []
+    for row in fetched_notes:
+        single_note = {"note_name": row[0], "content": row[1], "date_created": row[2], "date_modified": row[3]}
+        all_notes.append(single_note)
+
     return all_notes
+
 
 #add a note to the database
 def add_single_note(note_name: str, content: str, date_created: str, date_modified: str):

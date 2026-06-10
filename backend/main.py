@@ -15,8 +15,6 @@ app = FastAPI()
 connection = sqlite3.connect(DATABASE_FILE)
 cursor = connection.cursor()
 
-# cursor.execute("DROP TABLE IF EXISTS Notes")
-
 #Initialize notes table
 cursor.execute('''CREATE TABLE IF NOT EXISTS Notes(
 Name TEXT PRIMARY KEY NOT NULL,
@@ -32,10 +30,9 @@ def add_note(note_name: str, content: str, date_created: str, date_modified: str
     
     return helper.add_single_note(note_name, content, date_created, date_modified)
 
-
 #get request for all notes
-@app.get("/note/get_all_names")
-def get_all_note_names():
+@app.get("/notes")
+def get_all_notes():
     return helper.return_all_notes()
 
 #get request for contents of note with unique name
