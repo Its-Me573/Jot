@@ -15,8 +15,6 @@ app = FastAPI()
 connection = sqlite3.connect(DATABASE_FILE)
 cursor = connection.cursor()
 
-# cursor.execute("DROP TABLE IF EXISTS Notes")
-
 #Initialize notes table
 cursor.execute('''CREATE TABLE IF NOT EXISTS Notes(
 Name TEXT PRIMARY KEY NOT NULL,
