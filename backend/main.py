@@ -9,7 +9,18 @@ import sqlite3
 from config import DATABASE_FILE
 import helper
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = ["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 #Initialize database connection
 connection = sqlite3.connect(DATABASE_FILE)
