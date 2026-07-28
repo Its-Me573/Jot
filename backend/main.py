@@ -2,14 +2,13 @@
 Main application file for the Notes API.
 Handles routing, database connection, and CRUD operations.
 """
-
-from fastapi import FastAPI, HTTPException
 import sqlite3
-
-from config import DATABASE_FILE
 import helper
 
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
+from config import DATABASE_FILE
 
 from pydantic import BaseModel
 
@@ -56,22 +55,25 @@ Content TEXT NOT NULL,
 'Date Modified' TEXT NOT NULL)''')
 
 
-#post request to add a note to the database
+#post request to add a note to the database, using Creation_Note model
 @app.post("/note/")
-def add_note(note_name: str, content: str, date_created: str, date_modified: str):
-    if helper.does_note_exist(note_name):
-        raise HTTPException(status_code=400, detail = "A note with this name already exists")
-    
-    return helper.add_single_note(note_name, content, date_created, date_modified)
+def add_note(new_note:Creation_Note):
+    if helper.does_note_exist(new_note.name):
+        raise HTTPException(status_code = 400, detail = "A note with this name already exists")
+
+    return helper.add_single_note(new_note.name, new_note.content, new_note.date_created, new_note.date_modified)
+
 
 
 #get request for all notes
+#this function will stay the same
 @app.get("/notes")
 def get_all_notes():
     return helper.return_all_notes()
 
 
 #get request for contents of note with unique name
+#this function will stay the same and not use a model
 @app.get("/note/{note_name}")
 def get_note(note_name: str):
     if not helper.does_note_exist(note_name):
@@ -81,6 +83,7 @@ def get_note(note_name: str):
 
 
 #put request to modify a note or create note if it does not exist, update date_modified
+#rewrite this function to use a model, the Modify content model
 @app.put("/note/{note_name}")
 def modify_note(note_name: str, content: str, date_modified: str):
     if not helper.does_note_exist(note_name):
@@ -90,6 +93,7 @@ def modify_note(note_name: str, content: str, date_modified: str):
 
 
 #put endpoint that modifys a notes name only
+#rewrite this function to use a model, the Change_Note name modal
 @app.put("/note/{note_name}/rename")
 def change_name(note_name: str, new_name: str):
     if not helper.does_note_exist(note_name):
@@ -99,6 +103,7 @@ def change_name(note_name: str, new_name: str):
 
 
 #delete note endpoint
+#this functnion will stay the exact same
 @app.delete("/note/{note_name}")
 def delete_note(note_name: str):
     if not helper.does_note_exist(note_name):
