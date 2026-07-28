@@ -57,7 +57,7 @@ Content TEXT NOT NULL,
 
 #post request to add a note to the database, using Creation_Note model
 @app.post("/note/")
-def add_note(new_note:Creation_Note):
+def add_note(new_note: Creation_Note):
     if helper.does_note_exist(new_note.name):
         raise HTTPException(status_code = 400, detail = "A note with this name already exists")
 
@@ -66,14 +66,12 @@ def add_note(new_note:Creation_Note):
 
 
 #get request for all notes
-#this function will stay the same
 @app.get("/notes")
 def get_all_notes():
     return helper.return_all_notes()
 
 
 #get request for contents of note with unique name
-#this function will stay the same and not use a model
 @app.get("/note/{note_name}")
 def get_note(note_name: str):
     if not helper.does_note_exist(note_name):
@@ -82,14 +80,13 @@ def get_note(note_name: str):
     return helper.return_note(note_name)
 
 
-#put request to modify a note or create note if it does not exist, update date_modified
-#rewrite this function to use a model, the Modify content model
+#put request to modify a note
 @app.put("/note/{note_name}")
-def modify_note(note_name: str, content: str, date_modified: str):
+def modify_note(note_name: str, modified_Note: Content_Modification_Note):
     if not helper.does_note_exist(note_name):
-        raise HTTPException(status_code = 404, detail = "No note with name exists")
-    
-    return helper.modify_note(content, date_modified, note_name)
+            raise HTTPException(status_code = 404, detail = "No note with name exists")
+
+    return helper.modify_note(modified_Note.content, modified_Note.date_modified, note_name)
 
 
 #put endpoint that modifys a notes name only
