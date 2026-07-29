@@ -8,9 +8,10 @@ def open_db():
     cur = conn.cursor()
     return conn, cur
 
-def does_note_exist(note_name: str):
+
+def does_note_exist(target_note: str):
     conn, cur = open_db()
-    cur.execute("SELECT EXISTS(SELECT 1 FROM Notes WHERE Name = ?)", (note_name,))
+    cur.execute("SELECT EXISTS(SELECT 1 FROM Notes WHERE Name = ?)", (target_note,))
 
     if cur.fetchone()[0] == 0:
         cur.close()
@@ -19,13 +20,17 @@ def does_note_exist(note_name: str):
         cur.close()
         return True
 
+
 #return a single note
-def return_note(note_name: str):
+def return_note(target_note: str):
     conn, cur = open_db()
-    cur.execute("SELECT * FROM Notes WHERE Name = ?", (note_name,))
+
+    cur.execute("SELECT * FROM Notes WHERE Name = ?", (target_note,))
     single_note = cur.fetchone()
     cur.close()
+
     return {"note_name": single_note[0], "content": single_note[1], "date_created": single_note[2], "date_modified": single_note[3]}
+
 
 #return all notes
 def return_all_notes():
@@ -50,20 +55,34 @@ def add_single_note(note_name: str, content: str, date_created: str, date_modifi
     conn.close()
     return return_note(note_name)
 
+
 #modify note without modifying name
-def modify_note(content: str, date_modified: str, note_name: str):
+def modify_note(content: str, date_modified: str, target_note: str):
     conn, cur = open_db()
     cur.execute('''
         UPDATE Notes
         SET Content = ?, "Date Modified" = ?
         WHERE Name = ?
-    ''', (content, date_modified, note_name))
+    ''', (content, date_modified, target_note))
     conn.commit()
     cur.close()
 
-    return return_note(note_name)
+    return return_note(target_note)
 
 
+#Modify Date Modified attribute
+def change_date_modified(new_date: str, target_note):
+    conn, cur = open_db()
+    cur.execute('''
+            UPDATE Notes
+            SET "Date Modified" = ?
+            WHERE Name = ?
+        ''', (new_date, target_note))
+    conn.commit()
+    cur.close()
+
+
+#Modify without modifying content
 def change_note_name(new_name: str, note_name: str):
     conn, cur = open_db()
     cur.execute('''
@@ -74,6 +93,7 @@ def change_note_name(new_name: str, note_name: str):
     conn.commit()
     cur.close()
     return return_note(new_name)
+
 
 def delete_note(note_name: str):
     conn, cur = open_db()
