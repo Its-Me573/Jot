@@ -64,14 +64,13 @@ def add_note(new_note: Creation_Note):
     return helper.add_single_note(new_note.name, new_note.content, new_note.date_created, new_note.date_modified)
 
 
-
 #get request for all notes
 @app.get("/notes")
 def get_all_notes():
     return helper.return_all_notes()
 
 
-#get request for contents of note with unique name
+#get request for contents of a specific note
 @app.get("/note/{note_name}")
 def get_note(note_name: str):
     if not helper.does_note_exist(note_name):
@@ -80,7 +79,7 @@ def get_note(note_name: str):
     return helper.return_note(note_name)
 
 
-#put request to modify a note
+#put request to modify a notes content and modification date
 @app.put("/note/{note_name}")
 def modify_note(note_name: str, modified_Note: Content_Modification_Note):
     if not helper.does_note_exist(note_name):
@@ -89,18 +88,17 @@ def modify_note(note_name: str, modified_Note: Content_Modification_Note):
     return helper.modify_note(modified_Note.content, modified_Note.date_modified, note_name)
 
 
-#put endpoint that modifys a notes name only
-#rewrite this function to use a model, the Change_Note name modal
+#put endpoint that modifys a notes name and modification date
 @app.put("/note/{note_name}/rename")
-def change_name(note_name: str, new_name: str):
+def change_name(note_name: str, modified_note: Name_Modification_Note):
     if not helper.does_note_exist(note_name):
         raise HTTPException(status_code = 404, detail = "No note with name exists")
-    
-    return helper.change_note_name(new_name, note_name)
+
+    helper.change_date_modified(modified_note.date_modified, note_name)
+    return helper.change_note_name(modified_note.new_name, note_name)
 
 
 #delete note endpoint
-#this functnion will stay the exact same
 @app.delete("/note/{note_name}")
 def delete_note(note_name: str):
     if not helper.does_note_exist(note_name):
