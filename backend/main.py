@@ -99,7 +99,7 @@ def change_name(note_name: str, modified_note: Name_Modification_Note):
 
 
 #delete note endpoint
-@app.delete("/note/{note_name}")
+@app.delete("/note/{note_name:path}")
 def delete_note(note_name: str):
     if not helper.does_note_exist(note_name):
         raise HTTPException(status_code = 404, detail = "No note with name exists")
