@@ -2,7 +2,7 @@
 
 ## A RESTful Notes API built with FastAPI and SQLite.
 
-This project is a RESTful Notes API built with FastAPI and SQLite. It supports creating, reading, updating, renaming, and deleting notes. I built it to practice backend development and to learn how to structure a small API using Python and SQL.
+This project is a RESTful Notes API built with FastAPI and SQLite. It supports creating, reading, updating, renaming, and deleting notes. 
 
 ## Features
 - **Create notes**
@@ -25,33 +25,75 @@ This project is a RESTful Notes API built with FastAPI and SQLite. It supports c
 
 ## API Endpoints
 
-- **POST /note** — Create a new note  
+- **POST /notes** — Create a new note  
 - **GET /notes** — Get all notes  
 - **GET /note/{note_name}** — Retrieve a single note  
-- **PUT /note/{note_name}** — Update note content  
+- **PUT /note/{note_name}/modify** — Modify note content  
 - **PUT /note/{note_name}/rename** — Rename a note  
 - **DELETE /note/{note_name}** — Delete a note  
 
-## Example Request / Response
+## Pydantic Models
 
-### GET /note/{note_name}
+Models are used when creating a note, renaming a note, or modifying a note's
+content. The model data is sent as JSON in the request body.
 
-**Request**
-```http
-GET /note/shopping
-```
+### Creation Note
 
-**Response**
+The Creation_Note model is used when creating a new note with POST /notes.
+
+It accepts the following fields:
+
+- **name** — Name of the note
+- **content** — Content of the note. This field is optional.
+- **date_created** — Date the note was created
+- **date_modified** — Date the note was last modified
+
+**Example Request**
+
 ```json
 {
-  "note_name": "shopping",
-  "content": "milk, eggs, bread",
-  "date_created": "2026-06-09",
-  "date_modified": "2026-06-09"
+    "name": "shopping",
+    "content": "milk, eggs, bread",
+    "date_created": "2026-06-09",
+    "date_modified": "2026-06-09"
 }
 ```
 
-## Project Structure
+### Name Modification Note
+
+The Name_Modification_Note model is used when renaming a note with PUT /note/{note_name}/rename.
+
+It accepts the following fields:
+
+- **new_name** — The new name for the note
+- **date_modified** — Date the note was last modified
+
+Example Request
+```json
+{
+    "new_name": "groceries",
+    "date_modified": "2026-06-10"
+}
+```
+
+### Content Modification Note
+
+The Content_Modification_Note model is used when modifying a note's content with PUT /note/{note_name}/modify.
+
+It accepts the following fields:
+
+- **content** — The new content of the note
+- **date_modified** — Date the note was last modified
+
+Example Request
+```json
+{
+    "content": "milk, eggs, bread, apples",
+    "date_modified": "2026-06-10"
+}
+```
+
+### Project Structure
 
 ```text
 .

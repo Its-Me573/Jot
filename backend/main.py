@@ -1,7 +1,3 @@
-"""
-Main application file for the Notes API.
-Handles routing, database connection, and CRUD operations.
-"""
 import sqlite3
 import helper
 
@@ -55,8 +51,8 @@ Content TEXT NOT NULL,
 'Date Modified' TEXT NOT NULL)''')
 
 
-#post request to add a note to the database, using Creation_Note model
-@app.post("/note/")
+#POST: Add a note to database
+@app.post("/notes")
 def add_note(new_note: Creation_Note):
     if helper.does_note_exist(new_note.name):
         raise HTTPException(status_code = 400, detail = "A note with this name already exists")
@@ -64,14 +60,14 @@ def add_note(new_note: Creation_Note):
     return helper.add_single_note(new_note.name, new_note.content, new_note.date_created, new_note.date_modified)
 
 
-#get request for all notes
+#GET: Returns all notes; returns names and date modified
 @app.get("/notes")
 def get_all_notes():
     return helper.return_all_notes()
 
 
-#get request for contents of a specific note
-@app.get("/note/{note_name}")
+#GET: Returns contents of a specific note
+@app.get("/note/{note_name:path}")
 def get_note(note_name: str):
     if not helper.does_note_exist(note_name):
         raise HTTPException(status_code = 404, detail = "No note with name exists")
@@ -79,8 +75,19 @@ def get_note(note_name: str):
     return helper.return_note(note_name)
 
 
-#put request to modify a notes content and modification date
-@app.put("/note/{note_name}")
+#PUT: Modifys a notes name and modification date
+@app.put("/note/{note_name:path}/rename")
+def change_name(note_name: str, modified_note: Name_Modification_Note):
+    if not helper.does_note_exist(note_name):
+        raise HTTPException(status_code = 404, detail = "No note with name exists")
+
+    helper.change_date_modified(modified_note.date_modified, note_name)
+
+    return helper.change_note_name(modified_note.new_name, note_name)
+
+
+#PUT: Modify a notes content and modification date
+@app.put("/note/{note_name:path}/modify")
 def modify_note(note_name: str, modified_Note: Content_Modification_Note):
     if not helper.does_note_exist(note_name):
             raise HTTPException(status_code = 404, detail = "No note with name exists")
@@ -88,17 +95,7 @@ def modify_note(note_name: str, modified_Note: Content_Modification_Note):
     return helper.modify_note(modified_Note.content, modified_Note.date_modified, note_name)
 
 
-#put endpoint that modifys a notes name and modification date
-@app.put("/note/{note_name}/rename")
-def change_name(note_name: str, modified_note: Name_Modification_Note):
-    if not helper.does_note_exist(note_name):
-        raise HTTPException(status_code = 404, detail = "No note with name exists")
-
-    helper.change_date_modified(modified_note.date_modified, note_name)
-    return helper.change_note_name(modified_note.new_name, note_name)
-
-
-#delete note endpoint
+#DELETE: Delete a note
 @app.delete("/note/{note_name:path}")
 def delete_note(note_name: str):
     if not helper.does_note_exist(note_name):

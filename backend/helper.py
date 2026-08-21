@@ -2,7 +2,7 @@ import sqlite3
 
 from config import DATABASE_FILE
 
-#helper to open database
+#Open database
 def open_db():
     conn = sqlite3.connect(DATABASE_FILE)
     cur = conn.cursor()
@@ -21,7 +21,7 @@ def does_note_exist(target_note: str):
         return True
 
 
-#return a single note
+#return a single note; including note_name, content, date_created, and date_modified
 def return_note(target_note: str):
     conn, cur = open_db()
 
@@ -32,7 +32,7 @@ def return_note(target_note: str):
     return {"note_name": single_note[0], "content": single_note[1], "date_created": single_note[2], "date_modified": single_note[3]}
 
 
-#return all notes
+#return all notes; including note_name, content, date_created, and date_modified
 def return_all_notes():
     conn, cur = open_db()
     cur.execute("Select * From Notes")
@@ -71,7 +71,7 @@ def modify_note(content: str, date_modified: str, target_note: str):
 
 
 #Modify Date Modified attribute
-def change_date_modified(new_date: str, target_note):
+def change_date_modified(new_date: str, target_note: str):
     conn, cur = open_db()
     cur.execute('''
             UPDATE Notes
@@ -92,6 +92,7 @@ def change_note_name(new_name: str, note_name: str):
     ''', (new_name, note_name))
     conn.commit()
     cur.close()
+
     return return_note(new_name)
 
 
@@ -100,4 +101,5 @@ def delete_note(note_name: str):
     cur.execute("DELETE FROM Notes WHERE Name = ?", (note_name,))
     conn.commit()
     cur.close()
+
     return return_all_notes()
