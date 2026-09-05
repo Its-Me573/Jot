@@ -70,7 +70,7 @@ def get_all_notes():
 @app.get("/note/{note_name:path}")
 def get_note(note_name: str):
     if not helper.does_note_exist(note_name):
-        raise HTTPException(status_code = 404, detail = "No note with name exists")
+        raise HTTPException(status_code = 404, detail = "No note with this name exists")
     
     return helper.return_note(note_name)
 
@@ -79,7 +79,11 @@ def get_note(note_name: str):
 @app.put("/note/{note_name:path}/rename")
 def change_name(note_name: str, modified_note: Name_Modification_Note):
     if not helper.does_note_exist(note_name):
-        raise HTTPException(status_code = 404, detail = "No note with name exists")
+        raise HTTPException(status_code = 404, detail = "No note with this name exists")
+
+    #check whether the rename note name already exists
+    if helper.does_note_exist(modified_note.new_name):
+        raise HTTPException(status_code=409, detail= "A note with this name already exists")
 
     helper.change_date_modified(modified_note.date_modified, note_name)
 
@@ -90,7 +94,7 @@ def change_name(note_name: str, modified_note: Name_Modification_Note):
 @app.put("/note/{note_name:path}/modify")
 def modify_note(note_name: str, modified_Note: Content_Modification_Note):
     if not helper.does_note_exist(note_name):
-            raise HTTPException(status_code = 404, detail = "No note with name exists")
+            raise HTTPException(status_code = 404, detail = "No note this with name exists")
 
     return helper.modify_note(modified_Note.content, modified_Note.date_modified, note_name)
 
@@ -99,6 +103,6 @@ def modify_note(note_name: str, modified_Note: Content_Modification_Note):
 @app.delete("/note/{note_name:path}")
 def delete_note(note_name: str):
     if not helper.does_note_exist(note_name):
-        raise HTTPException(status_code = 404, detail = "No note with name exists")
+        raise HTTPException(status_code = 404, detail = "No note this with name exists")
     
     return helper.delete_note(note_name)
