@@ -50,7 +50,9 @@ export async function createNote (newNoteName) {
         const url = config.baseURL + "/notes";
     
         const currentDate = getCurrentDateAndTime();
-        
+
+        const emptyNoteDelta = { ops: [{ insert: "\u200B" }] };
+
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -59,7 +61,7 @@ export async function createNote (newNoteName) {
             },
             body:JSON.stringify({
                 name: newNoteName,
-                content: "\u200B",
+                content: emptyNoteDelta,
                 date_created: currentDate,
                 date_modified: currentDate
             })
