@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+
+
+    <link rel="icon" href="../images/quill.png" type="image/png">
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+
+</head>
+
+
+<body id="app-background">    
+
+    <div id = "navbar">
+        <header class = "navbar-app-name">Notes</header>
+    </div>
+
+    
+    <div id = "main-app">
+
+        <div id = "note-name-box">
+            <div id = "notes-search-addition">
+                <input type = "text" id = "search-bar" placeholder= "🔍Search Note">
+                <button id = "add-note-button">&#43;</button>
+            </div>
+
+            <div id = "scrollable-note-names"></div>
+        </div>
+
+
+        <div id = "note-editor-container">
+            <div id = "note-title-bar">
+                <input type= "text" id = "rename-note-input">
+            </div>
+
+            <div id = "note-text-editor">
+                <div id="editor"></div>
+            </div>
+        </div>  
+
+    </div>
+
+    
+    <dialog id = "delete-note-dialog" class = "dialog-popup">
+        <div class = "dialog-header">
+
+            <div class = dialog-title>Delete Note?</div>
+
+            <button class = "close-dialog" dialog-id = "delete-note-dialog">&times;</button>
+        
+        </div>
+
+        <div class = "dialog-body">
+            <div id = "delete-warning">Are you sure you want to delete this note? This action can't be undone.</div>
+        </div>
+
+        <div class = "delete-selection-buttons">
+
+            <button id = "delete-note-button">Delete</button>
+            <button class = "close-dialog" dialog-id = "delete-note-dialog">Cancel</button>
+        
+        </div>
+
+    </dialog>
+       
+    
+    <dialog id = "create-note-dialog" class = "dialog-popup">
+        <div class = "dialog-header">
+            <div class = dialog-title>Create New Note</div>
+
+            <button class = "close-dialog" dialog-id = "create-note-dialog">&times;</button>
+        
+        </div>
+
+        <div class = "dialog-body">
+            <input id = "create-note-input" type= "text" placeholder= "Ex: Note 1">
+        </div>
+
+        <div class = "delete-selection-buttons">
+
+            <button class = "close-dialog" dialog-id = "create-note-dialog">Cancel</button>
+        
+            <button id = "create-note-button">Create</button>
+        </div>
+    </dialog>
+
+
+    <dialog id="rename-note-empty-dialog" class="dialog-popup">
+        <div class="dialog-header">
+            <div class="dialog-title">Current Note Name is Empty</div>
+            <button class = "close-dialog" dialog-id = "rename-note-empty-dialog">&times;</button>
+        </div>
+    </dialog>
+
+
+    <dialog id="rename-note-duplicate-dialog" class="dialog-popup">
+        <div class="dialog-header">
+            <div class="dialog-title">Current Note Name Already Exists</div>
+            <button class = "close-dialog" dialog-id = "rename-note-duplicate-dialog">&times;</button>
+        </div>
+    </dialog>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script type = "module" src = "./app.js"></script>
+</body>
+</html>
