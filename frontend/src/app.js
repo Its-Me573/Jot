@@ -275,28 +275,6 @@ document.getElementById("create-note-button").addEventListener("click", async (e
     }
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //text input to rename a note
 document.getElementById("rename-note-input").addEventListener("focusout", async (e) => {
     //check whether there is a note in session storage
