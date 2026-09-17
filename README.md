@@ -1,6 +1,6 @@
 # Jot
 
-A minimal, fast note-taking app. Jot down text quickly, with autosave, fuzzy search, and a clean rich-text editor — no clutter, no accounts, no friction.
+A minimal, fast note-taking app
 
 ## Features
 
