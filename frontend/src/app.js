@@ -383,6 +383,3 @@ quill.on('text-change', helper.throttle(() => {
     helper.clearNoteListUI();
     helper.refreshNotesUI();
 }, 10000));
-
-//to-do
-//when a note is selected the button of the note will change color making it easier for the user to know what button was clicked
