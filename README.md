@@ -5,7 +5,7 @@ A minimal, fast note-taking app
 ## Features
 
 - Create, rename, edit, and delete notes
-- Rich text editing (Quill) with autosave — saves shortly after you stop typing, and again every 10 seconds regardless
+- Rich text editing (Quill) with autosave. Saves shortly after you stop typing, and again every 10 seconds regardless
 - Fuzzy search across note names (Fuse.js)
 - Editor state persists across page refresh (via session storage)
 - Fully containerized with Docker for consistent setup
@@ -18,7 +18,7 @@ A minimal, fast note-taking app
 
 ## Current Scope
 
-This is a **single-shared-notes** app — there is no authentication or per-user data separation. Every visitor reads and writes the same note store. This was a deliberate choice to focus on the core note-taking API, editor experience, and Docker-based deployment first.
+This is a **single-shared-notes** app. There is no authentication or per-user data separation. Every visitor reads and writes the same note store. This was a deliberate choice to focus on the core note-taking API, editor experience, and Docker-based deployment first.
 
 **Planned next steps:**
 - User accounts & authentication
