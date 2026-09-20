@@ -33,10 +33,10 @@ def test_note_creation():
     conn, cur = create_temp_db(test_db_path)
 
     response = client.post("/notes", json = {
-            "name": "Test Note",
-            "content": "Hello World",
-            "date_created": "1/1/2026 1:00PM",
-            "date_modified": "1/1/2026 1:00PM"
+        "name": "Test Note",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
     })
 
     assert response.status_code == 200
@@ -58,17 +58,17 @@ def test_duplicate_note_creation():
     conn, cur = create_temp_db(test_db_path)
 
     response1 = client.post("/notes", json = {
-                "name": "Test Note",
-                "content": "Hello World",
-                "date_created": "1/1/2026 1:00PM",
-                "date_modified": "1/1/2026 1:00PM"
+        "name": "Test Note",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
     })
 
     response2 = client.post("/notes", json = {
-            "name": "Test Note",
-            "content": "Hello World",
-            "date_created": "1/1/2026 1:00PM",
-            "date_modified": "1/1/2026 1:00PM"
+        "name": "Test Note",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
     })
 
     assert response1.status_code == 200
@@ -99,6 +99,52 @@ def test_get_all_notes_returns_empty_list():
     os.remove(test_db_path)
 
 
+def test_get_all_notes_return():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+
+    conn, cur = create_temp_db(test_db_path)
+
+    note1_creation = client.post("/notes", json = {
+        "name": "Note One",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+    assert note1_creation.status_code == 200
+
+    note2_creation = client.post("/notes", json = {
+        "name": "Note Two",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+    assert note2_creation.status_code == 200
+
+    returned_notes = client.get("/notes")
+
+    note_names = []
+    for note in returned_notes.json():
+        note_names.append(note["note_name"])
+
+    assert len(returned_notes.json()) == 2
+    assert "Note One" in note_names
+    assert "Note Two" in note_names
+
+    helper.DATABASE_FILE = original_db_file
+            
+    cur.close()
+    os.remove(test_db_path)
+
+
+
+
+
+
+
+
 
 
 
@@ -112,10 +158,10 @@ def test_get_existing_note():
 
     #create new note to read
     create_response = client.post("/notes", json = {
-            "name": "Test Note",
-            "content": "Hello World",
-            "date_created": "1/1/2026 1:00PM",
-            "date_modified": "1/1/2026 1:00PM"
+        "name": "Test Note",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
     })
 
     assert create_response.status_code == 200
