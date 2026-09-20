@@ -139,16 +139,6 @@ def test_get_all_notes_return():
     os.remove(test_db_path)
 
 
-
-
-
-
-
-
-
-
-
-
 def test_get_existing_note():
     original_db_file = helper.DATABASE_FILE
     test_db_path = "testFile.db"
@@ -191,3 +181,23 @@ def test_get_existing_note_failure():
     helper.DATABASE_FILE = original_db_file
     cur.close()
     os.remove(test_db_path)
+
+
+def test_rename_note_does_not_exist():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+    conn, cur = create_temp_db(test_db_path)
+
+    rename_response = client.put("/note/NoteOne/rename", json = {
+        "new_name": "New Note Name",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert rename_response.status_code == 404
+    
+    helper.DATABASE_FILE = original_db_file
+    cur.close()
+    os.remove(test_db_path)
+    
