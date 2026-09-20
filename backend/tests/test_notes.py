@@ -324,4 +324,22 @@ def test_modify_note_success():
     os.remove(test_db_path)
 
 
+def test_delete_note_no_note_exists():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+    conn, cur = create_temp_db(test_db_path)
+
+    delete_response = client.delete("/note/Note One")
+
+    assert delete_response.status_code == 404
+
+    helper.DATABASE_FILE = original_db_file
+    cur.close()
+    os.remove(test_db_path)
+
+
+
+
     
