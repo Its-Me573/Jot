@@ -10,6 +10,8 @@ from fastapi.testclient import TestClient
 
 client = TestClient(app)
 
+if os.path.exists("database.db"):
+    os.remove("database.db")
 
 def create_temp_db(database_path):
     conn = sqlite3.connect(database_path)
@@ -338,6 +340,34 @@ def test_delete_note_no_note_exists():
     helper.DATABASE_FILE = original_db_file
     cur.close()
     os.remove(test_db_path)
+
+
+def test_delete_note_success():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+    conn, cur = create_temp_db(test_db_path)
+
+    create_response_one = client.post("/notes", json = {
+        "name": "Note One",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert create_response_one.status_code == 200
+
+    delete_response = client.delete("/note/Note One")
+
+    assert delete_response.status_code == 200
+    assert delete_response.json() == []
+
+    helper.DATABASE_FILE = original_db_file
+    cur.close()
+    os.remove(test_db_path)
+
+
 
 
 
