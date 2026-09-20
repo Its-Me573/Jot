@@ -43,5 +43,36 @@ def test_note_creation():
 
     helper.DATABASE_FILE = original_db_file
 
-    cur.close
+    cur.close()
+    os.remove(test_db_path)
+
+def test_duplicate_note_creation():
+    #test for note called "Test Note"
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+
+    conn, cur = create_temp_db(test_db_path)
+
+    response1 = client.post("/notes", json = {
+                "name": "Test Note",
+                "content": "Hello World",
+                "date_created": "1/1/2026 1:00PM",
+                "date_modified": "1/1/2026 1:00PM"
+    })
+
+    response2 = client.post("/notes", json = {
+            "name": "Test Note",
+            "content": "Hello World",
+            "date_created": "1/1/2026 1:00PM",
+            "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert response2.status_code == 400
+    assert response2.json() == {"detail": "A note with this name already exists"}
+
+    helper.DATABASE_FILE = original_db_file
+    
+    cur.close()
     os.remove(test_db_path)
