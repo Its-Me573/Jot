@@ -81,6 +81,28 @@ def test_duplicate_note_creation():
     os.remove(test_db_path)
 
 
+def test_get_all_notes_returns_empty_list():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+
+    conn, cur = create_temp_db(test_db_path)
+
+    empty_response = client.get("/notes")
+
+    assert empty_response.json() == []
+
+    helper.DATABASE_FILE = original_db_file
+        
+    cur.close()
+    os.remove(test_db_path)
+
+
+
+
+
+
 def test_get_existing_note():
     original_db_file = helper.DATABASE_FILE
     test_db_path = "testFile.db"
