@@ -296,4 +296,32 @@ def test_modify_note_no_note_exists():
     os.remove(test_db_path)
 
 
+def test_modify_note_success():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+    conn, cur = create_temp_db(test_db_path)
+
+    create_response_one = client.post("/notes", json = {
+        "name": "Note One",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert create_response_one.status_code == 200
+
+    modify_response = client.put("/note/Note One/modify", json = {
+        "content": "Hello Modified",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert modify_response.json()["note_name"] == "Note One"
+
+    helper.DATABASE_FILE = original_db_file
+    cur.close()
+    os.remove(test_db_path)
+
+
     
