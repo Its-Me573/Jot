@@ -69,6 +69,7 @@ def test_duplicate_note_creation():
             "date_modified": "1/1/2026 1:00PM"
     })
 
+    assert response1.status_code == 200
     assert response2.status_code == 400
     assert response2.json() == {"detail": "A note with this name already exists"}
 
