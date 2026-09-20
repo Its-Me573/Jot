@@ -77,3 +77,31 @@ def test_duplicate_note_creation():
     
     cur.close()
     os.remove(test_db_path)
+
+def test_get_existing_note():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+    conn, cur = create_temp_db(test_db_path)
+
+    #create new note to read
+    create_response = client.post("/notes", json = {
+                    "name": "Test Note",
+                    "content": "Hello World",
+                    "date_created": "1/1/2026 1:00PM",
+                    "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert create_response.status_code == 200
+
+    get_response = client.get("/note/Test Note")
+    assert get_response.status_code == 200
+    assert get_response.json()["note_name"] == "Test Note"
+    assert get_response.json()["content"] == "Hello World"
+
+    helper.DATABASE_FILE = original_db_file
+    cur.close()
+    os.remove(test_db_path)
+
+    
