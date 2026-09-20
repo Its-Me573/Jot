@@ -23,6 +23,7 @@ def create_temp_db(database_path):
 
     return conn, cur
 
+
 def test_note_creation():
     original_db_file = helper.DATABASE_FILE
     test_db_path = "testFile.db"
@@ -45,6 +46,7 @@ def test_note_creation():
 
     cur.close()
     os.remove(test_db_path)
+
 
 def test_duplicate_note_creation():
     #test for note called "Test Note"
@@ -78,6 +80,7 @@ def test_duplicate_note_creation():
     cur.close()
     os.remove(test_db_path)
 
+
 def test_get_existing_note():
     original_db_file = helper.DATABASE_FILE
     test_db_path = "testFile.db"
@@ -87,15 +90,16 @@ def test_get_existing_note():
 
     #create new note to read
     create_response = client.post("/notes", json = {
-                    "name": "Test Note",
-                    "content": "Hello World",
-                    "date_created": "1/1/2026 1:00PM",
-                    "date_modified": "1/1/2026 1:00PM"
+            "name": "Test Note",
+            "content": "Hello World",
+            "date_created": "1/1/2026 1:00PM",
+            "date_modified": "1/1/2026 1:00PM"
     })
 
     assert create_response.status_code == 200
 
     get_response = client.get("/note/Test Note")
+
     assert get_response.status_code == 200
     assert get_response.json()["note_name"] == "Test Note"
     assert get_response.json()["content"] == "Hello World"
@@ -104,4 +108,18 @@ def test_get_existing_note():
     cur.close()
     os.remove(test_db_path)
 
-    
+
+def test_get_existing_note_failure():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+    conn, cur = create_temp_db(test_db_path)
+
+    get_response = client.get("/note/Test Note")
+
+    assert get_response.status_code == 404
+
+    helper.DATABASE_FILE = original_db_file
+    cur.close()
+    os.remove(test_db_path)
