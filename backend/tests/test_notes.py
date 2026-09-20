@@ -275,3 +275,25 @@ def test_rename_note_successfully():
     helper.DATABASE_FILE = original_db_file
     cur.close()
     os.remove(test_db_path)
+
+
+def test_modify_note_no_note_exists():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+    conn, cur = create_temp_db(test_db_path)
+
+    modify_response = client.put("/note/Note One/modify", json = {
+        "content": "Changed",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert modify_response.status_code == 404
+
+    helper.DATABASE_FILE = original_db_file
+    cur.close()
+    os.remove(test_db_path)
+
+
+    
