@@ -240,3 +240,38 @@ def test_rename_note_duplicate():
 
 
 
+def test_rename_note_successfully():
+    original_db_file = helper.DATABASE_FILE
+    test_db_path = "testFile.db"
+
+    helper.DATABASE_FILE = test_db_path
+    conn, cur = create_temp_db(test_db_path)
+
+    create_response_one = client.post("/notes", json = {
+        "name": "Note One",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert create_response_one.status_code == 200
+
+    create_response_two = client.post("/notes", json = {
+        "name": "Note Two",
+        "content": "Hello World",
+        "date_created": "1/1/2026 1:00PM",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert create_response_two.status_code == 200
+
+    rename_response = client.put("/note/Note One/rename", json = {
+        "new_name": "Renamed One",
+        "date_modified": "1/1/2026 1:00PM"
+    })
+
+    assert rename_response.json()["note_name"] == "Renamed One"
+
+    helper.DATABASE_FILE = original_db_file
+    cur.close()
+    os.remove(test_db_path)
