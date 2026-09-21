@@ -106,3 +106,14 @@ Jot/
         ├── helper.js       # API calls, search, and rendering helpers
         └── styles.css
 ```
+## API Tests
+
+The backend includes a pytest suite to validate all FastAPI endpoints.
+
+### Running Tests
+
+From the project root:
+
+```bash
+cd backend
+pytest
